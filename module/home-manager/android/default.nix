@@ -18,7 +18,7 @@ with lib; let
   # ── Profile definitions ───────────────────────────────────────────────
   profileTools = {
     minimal = [
-      "adb" "scrcpy"
+      "adb" "andro" "scrcpy"
     ];
 
     standard = profileTools.minimal ++ [

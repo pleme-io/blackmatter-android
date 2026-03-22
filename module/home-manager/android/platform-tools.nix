@@ -6,7 +6,10 @@ with lib; let
   inherit (hmToolHelpers) mkSafeToolMap mkEnabledPackages mkConditionalAliases;
 
   toolMap = mkSafeToolMap {
-    all = { adb = pkgs.android-tools or null; };
+    all = {
+      adb = pkgs.android-tools or null;
+      andro = pkgs.andro or null;
+    };
   };
 
   aliases = {
