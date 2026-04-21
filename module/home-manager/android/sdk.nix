@@ -3,12 +3,22 @@
 # When the android-nixpkgs overlay is applied (pkgs.androidSdk exists),
 # uses it for daily-updated SDK packages. Otherwise falls back to
 # nixpkgs androidenv.composeAndroidPackages.
+#
+# All `pkgs` references are deferred into the `config = mkIf cfg.enable (...)`
+# body. Pre-computing `hasAndroidNixpkgs = pkgs ? androidSdk` in the
+# top-level let-binding caused infinite recursion during NixOS eval:
+# HM evaluating `home-manager.users.<u>._module.freeformType` forced
+# the module body, which forced `_module.args.pkgs`, which forced the
+# user's config, which re-entered this module. Deferring into mkIf keeps
+# the module body inert unless android is actually enabled.
 { lib, pkgs, config, ... }:
 with lib; let
   cfg = config.blackmatter.components.android;
-  hasAndroidNixpkgs = pkgs ? androidSdk;
 in {
   config = mkIf (cfg.enable && cfg.sdk.enable) (
+    let
+      hasAndroidNixpkgs = pkgs ? androidSdk;
+    in
     if hasAndroidNixpkgs then
       # ── android-nixpkgs path (daily-updated, immutable) ───────────────
       let sdk = pkgs.androidSdk cfg.sdk.androidNixpkgsPackages;
