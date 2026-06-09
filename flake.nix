@@ -2,10 +2,9 @@
   description = "Blackmatter Android — Android SDK + Emulator + platform tools provisioning";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs.follows = "substrate/nixpkgs";
     substrate = {
       url = "github:pleme-io/substrate";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
